@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -8,10 +9,10 @@ import (
 )
 
 type Product struct {
-	Id           int     `json:"id"`
-	Manufactured string  `json:"made-by"`
-	Name         string  `json:"name"`
-	Price        float32 `json:"price"`
+	Id           int     `json:"Id"`
+	Manufactured string  `json:"Manufactured"`
+	Name         string  `json:"Name"`
+	Price        float32 `json:"Price"`
 }
 
 // array of Products
@@ -25,6 +26,18 @@ var products = []Product{
 // here is the response to request of all products
 func getProducts(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, products)
+}
+
+// function for POST requests that adds a new product to a list
+func postProduct(c *gin.Context) {
+	var newProduct Product
+
+	if err := c.BindJSON(&newProduct); err != nil {
+		fmt.Printf("%s", err)
+		return
+	}
+	products = append(products, newProduct)
+	c.IndentedJSON(http.StatusCreated, newProduct)
 }
 
 // this func returns all products whose manufacturer is Apple
@@ -48,6 +61,8 @@ func main() {
 	//here we manage the GET request for a specific endpoint
 	router.GET("/products", getProducts)
 	router.GET("/products/apple", getAppleProducts)
+	//here we manage the POST request to add a new product
+	router.POST("/products", postProduct)
 
 	//here we run a server on a local device with localhost 8080 address
 	err := router.Run("localhost:8080")
