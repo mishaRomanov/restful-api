@@ -30,7 +30,7 @@ func getProducts(c *gin.Context) {
 // function for POST requests that adds a new product to a list
 func postProduct(c *gin.Context) {
 	var newProduct Product
-	
+
 	if err := c.BindJSON(&newProduct); err != nil {
 		log.Printf("%s\n", err)
 		return
