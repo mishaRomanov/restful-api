@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -32,8 +31,9 @@ func getProducts(c *gin.Context) {
 func postProduct(c *gin.Context) {
 	var newProduct Product
 
+	//допилить функционал записи ошибки в файл логов logs
 	if err := c.BindJSON(&newProduct); err != nil {
-		fmt.Printf("%s", err)
+		log.Printf("%s\n", err)
 		return
 	}
 	products = append(products, newProduct)
@@ -41,18 +41,13 @@ func postProduct(c *gin.Context) {
 }
 
 // this func returns all products whose manufacturer is Apple
-func getAppleProducts(c *gin.Context) {
-	iPhones := func() []Product {
-		arr := make([]Product, 0)
-		for _, v := range products {
-			if v.Manufactured == "Apple" {
-				arr = append(arr, v)
-			}
+func getProductsByBrand(c *gin.Context) {
+	brand := c.Param("Manufactured")
+	for _, v := range products {
+		if v.Manufactured == brand {
+			c.IndentedJSON(http.StatusOK, v)
 		}
-		return arr
 	}
-	res := iPhones()
-	c.IndentedJSON(http.StatusOK, res)
 }
 
 func main() {
@@ -60,7 +55,8 @@ func main() {
 
 	//here we manage the GET request for a specific endpoint
 	router.GET("/products", getProducts)
-	router.GET("/products/apple", getAppleProducts)
+	router.GET("/products/:Manufactured", getProductsByBrand)
+
 	//here we manage the POST request to add a new product
 	router.POST("/products", postProduct)
 
