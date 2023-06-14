@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
 )
 
 type Product struct {
@@ -64,4 +65,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	db.
+
+
 }
