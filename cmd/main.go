@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mishaRomanov/restful-api/db"
 )
 
 type Product struct {
@@ -64,4 +65,9 @@ func main() {
 		log.Fatal(err)
 	}
 
+	database, err := db.OpenPostgresDB()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer database.Close()
 }
