@@ -40,7 +40,6 @@ func postProduct(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newProduct)
 }
 
-// this func returns all products whose manufacturer is Apple
 func getProductsByBrand(c *gin.Context) {
 	brand := c.Param("Manufactured")
 	for _, v := range products {
